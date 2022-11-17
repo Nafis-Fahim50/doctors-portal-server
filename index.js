@@ -19,6 +19,7 @@ async function run() {
     try {
         const appointmentOptionCollection = client.db('doctorPortal').collection('appointmentOptions');
         const bookingCollection = client.db('doctorPortal').collection('bookings');
+        const usersCollection = client.db('doctorPortal').collection('users');
         
         
         app.get('/appointoptions', async (req, res) => {
@@ -67,6 +68,12 @@ async function run() {
             }
             const result = await bookingCollection.insertOne(booking);
             res.send(result)
+        })
+
+        app.post('/users', async(req,res)=>{
+            const user = req.body;
+            const result = await usersCollection.insertOne(user)
+            res.send(result);
         })
 
         
