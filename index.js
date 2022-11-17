@@ -20,6 +20,7 @@ async function run() {
         const appointmentOptionCollection = client.db('doctorPortal').collection('appointmentOptions');
         const bookingCollection = client.db('doctorPortal').collection('bookings');
         
+        
         app.get('/appointoptions', async (req, res) => {
             const date = req.query.date;
             const query = {};
@@ -40,11 +41,35 @@ async function run() {
             res.send(options);
         })
 
+
+        app.get('/bookings', async(req,res)=>{
+            const email = req.query.email;
+            const query = {
+                email: email
+            }
+            const bookings = await bookingCollection.find(query).toArray();
+            res.send(bookings);
+        })
+
+
         app.post('/bookings', async(req,res)=>{
             const booking = req.body;
+            const query = {
+                appointmentDate : booking.appointmentDate,
+                treatmentName : booking.treatmentName,
+                email : booking.email
+            }
+            const alreadyBooked = await bookingCollection.find(query).toArray();
+
+            if(alreadyBooked.length){
+                const message = `You already hava a book on ${booking.appointmentDate}`;
+                return res.send({acknowledged:false, message})
+            }
             const result = await bookingCollection.insertOne(booking);
             res.send(result)
         })
+
+        
     }
     finally{
 
