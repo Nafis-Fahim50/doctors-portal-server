@@ -34,6 +34,7 @@ async function run() {
         const appointmentOptionCollection = client.db('doctorPortal').collection('appointmentOptions');
         const bookingCollection = client.db('doctorPortal').collection('bookings');
         const usersCollection = client.db('doctorPortal').collection('users');
+        const doctorsCollection = client.db('doctorPortal').collection('doctors');
         
         
         app.get('/appointoptions', async (req, res) => {
@@ -143,6 +144,18 @@ async function run() {
             const query = {email}
             const user = await usersCollection.findOne(query);
             res.send({isAdmin: user?.role === 'admin'})
+        })
+
+        app.get('/doctors', async(req,res)=>{
+            const query = {};
+            const result = await doctorsCollection.find(query).toArray();
+            res.send(result);
+        })
+        
+        app.post('/doctors', async(req,res)=>{
+            const doctor = req.body;
+            const result = await doctorsCollection.insertOne(doctor);
+            res.send(result);
         })
         
     }
