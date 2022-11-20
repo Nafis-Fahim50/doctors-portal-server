@@ -142,6 +142,18 @@ async function run() {
             res.send(result);
         })
 
+        // app.get('/addPrice', async(req, res)=>{
+        //     const filter = {}
+        //     const options = { upsert: true }
+        //     const updateDoc = {
+        //         $set:{
+        //             price: 99
+        //         }
+        //     }
+        //     const result = await appointmentOptionCollection.updateMany(filter,updateDoc,options)
+        //     res.send(result)
+        // })
+
         app.get('/users/admin/:email', async(req,res)=>{
             const email = req.params.email;
             const query = {email}
